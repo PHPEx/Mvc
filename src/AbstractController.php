@@ -7,6 +7,8 @@ use Inspector\Controller\Route;
 
 abstract class AbstractController implements MvcInterface
 {
+	protected $params = array();
+
 	public function getInspector(MvcInterface $controller)
 	{
 		$inspectorController = new Controller();
@@ -14,7 +16,20 @@ abstract class AbstractController implements MvcInterface
 		return $inspectorController;
 	}
 
-	public function validate(Route $route, $uri, $method){
-		$route->getRoute() == $uri ? $this->{$method}() : null;		
+	public function validate(Route $route, $method){
+		if($route->getRoute()) 
+		{			
+			$this->setParam($route->getParams());
+			$this->{$method}();
+		}		
+	}
+
+	public function setParam(array $data)
+	{
+		$this->params = $data;
+	}
+
+	public function getParams(){
+		return $this->params;
 	}
 }
